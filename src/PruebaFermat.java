@@ -33,7 +33,7 @@ public class PruebaFermat {
     public static void main(String[] args) {
 // FERMAT
         int n1 = 31;
-        int n2 = 719;
+        int n2 = 5749;
 
         long startTime1 = System.nanoTime(); // ⏱️ Start
         System.out.println(n2 + " es primo? " + PrimosFermat(n2, 178686));

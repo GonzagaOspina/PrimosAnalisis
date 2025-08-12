@@ -1,0 +1,53 @@
+PROMT DE GPT: Podrias explicarme en detalle cada uno de estos algoritmos, incluyendo la fuente de donde tomaste la explicacion y una implementacion en java
+
+aclaracion: las implementaciones fueron tomadas de diferentes fuentes expresadas al final de cada uno de los codigos puestos para tener una mejor claridad
+y entendimiento de lo escrito en los codigos, puesto que, las implementaciones de GTP se tornan complicadas.
+
+1 Prueba de Miller–Rabin (probabilística, basada en exponenciación modular) Descripción rápida: Es una prueba de primalidad probabilística
+(test de primalidad de tipo “test de esparcimiento”). Para un número impar n > 2 se escribe n−1 = 2^s · d con d impar. Para una base a (2 ≤ a ≤ n−2)
+se calcula x = a^d mod n. Si x ≡ 1 (mod n) o x ≡ −1 (mod n) la base pasa. Si no, se elevan sucesivamente x ← x^2 mod n hasta s−1 veces; si en algún momento
+x ≡ −1 pasa, si no, se declara compuesto. Repetir con varias bases reduce la probabilidad de error (falsos primos declarados primos). Complejidad: O(k · log^3 n)
+por k bases (multiplicaciones modulares; depende de la implementación). Ventajas / limitaciones: Muy rápido en práctica. Para tamaños grandes se suele usar
+con 5–10 bases. No es determinista salvo para rangos limitados usando un conjunto fijo de bases (por ejemplo, para enteros < 2^64 hay conjuntos pequeños de
+bases deterministas conocidos).
+
+2 Prueba de Fermat (basado en el pequeño teorema de Fermat) Descripción rápida: Si p es primo y 1 < a < p entonces a^(p−1) ≡ 1 (mod p).
+La prueba de Fermat escoge una base a y comprueba esto; si falla, n es compuesto. Pero si pasa, n es probable primo pero puede ser pseudoprimo
+de Fermat para esa base (y hay números Carmichael que pasan para todas las bases coprimas). Muy rápida, pero poco fiable por los pseudoprimos.
+
+3 Prueba de Solovay–Strassen (basada en residuos cuadráticos y símbolo de Jacobi) Descripción rápida: Para n impar y una base a se calcula a^((n−1)/2) mod n
+y el símbolo de Jacobi (a/n). Si a^((n−1)/2) ≠ (a/n) (mod n) entonces n es compuesto. Si pasan varias bases, n es probable primo. Más fuerte que la prueba de
+Fermat en general; probabilidad de error < 1/2 por prueba (para bases seleccionadas al azar).
+
+4 Prueba Baillie–PSW (combinación Miller–Rabin + pruebas de Lucas) Descripción rápida: Baillie–PSW (BPSW) es una combinación práctica: normalmente se hace un Miller–Rabin
+fuerte con base 2 (o unas pocas bases) y un “strong Lucas probable prime test”. No se conocen contrajemplos (números compuestos que pasan BPSW) hasta tamaños muy grandes;
+por eso es muy usado en software (es extremadamente fiable en práctica). El componente crucial es la prueba de Lucas fuerte (una familia de tests usando sucesiones de Lucas
+con parámetros P,Q escogidos de forma que el discriminante D = P² − 4Q tenga Jacobi (D/n) = −1.
+
+5 Prueba AKS (Agrawal–Kayal–Saxena) Descripción rápida: Es un algoritmo determinista y polinomial (Agrawal–Kayal–Saxena, 2002) que prueba si n es primo comprobando si
+(x+a)^n ≡ x^n + a (mod n, x^r − 1) para ciertos a y r que satisfacen condiciones relacionadas con el orden multiplicativo de n módulo r. Garantiza determinismo en tiempo
+polinomial (teóricamente importante). Complejidad original bastante alta; existen mejoras, pero en práctica AKS es mucho más lento que pruebas probabilísticas y raramente
+usado en software práctico.
+
+6 Algoritmo de Wilson (teorema de Wilson) Descripción rápida: Wilson establece que n es primo si y solo si (n−1)! ≡ −1 (mod n). Es una caracterización exacta (determinista),
+pero calcular factoriales módulo n cuesta O(n) multiplicaciones, lo que lo hace totalmente impráctico para n grandes.
+
+7 Prueba de Lucas–Lehmer (para primos de Mersenne) Descripción rápida: Se usa exclusivamente para Mersenne M_p = 2^p − 1 donde p es primo. Sucesión: s_0 = 4 y s_{k+1} = s_k² − 2.
+Entonces M_p es primo si y solo si s_{p−2} ≡ 0 (mod M_p). Muy eficiente para Mersenne grandes; así se han detectado grandes primos (GIMPS).
+
+8 Prueba de Lehmann (probabilística, basada en exponenciación modular) Descripción rápida: Similar a Solovay–Strassen pero más simple: calcula a^(p−1)/2 mod p. Si el resultado es 1 o
+p−1, la base a pasa; otros resultados indican que n es compuesto. Tiene una probabilidad de error, pero es menos eficaz que tests más modernos. Es un test “intermedio” entre Fermat
+y Solovay–Strassen.
+
+
+
+Resumen comparativo
+Algoritmo	        Tipo	                Complejidad	                Uso recomendado
+Fermat	            Probabilística	        Rápido	                    Solo educativo (Carmichael)
+Miller–Rabin	    Probabilística          fuerte	                    Muy rápido y fiable	Práctico general
+Solovay–Strassen	Probabilística	        Similar a MR menos usado	Educativo
+Baillie–PSW	        Determinístico práctico	Muy confiable en práctica	Recomendado robusto
+AKS	                Determinista (teórico)	Polinomial, lento	        Interés teórico
+Wilson	            Determinista exacto	    Factorial lento	            Solo matemático
+Lucas–Lehmer	    Para Mersenne	        Muy eficiente en ese caso	Grandes primos de Mersenne
+Lehmann	            Probabilística	        Simple pero menos fiable	Educativo

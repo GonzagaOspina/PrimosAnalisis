@@ -1,57 +1,111 @@
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Random;
 
 public class PruebaSolovayStrassen {
 
+    // Modulo function to perform binary exponentiation
+    static long modulo(long base, long exponent, long mod) {
+        long x = 1;
+        long y = base;
 
-    private static final SecureRandom rnd = new SecureRandom();
-
-    // calcula el símbolo de Jacobi (a/n), con n impar > 1
-    public static int jacobi(BigInteger a, BigInteger n) {
-        if (n.compareTo(BigInteger.ZERO) <= 0 || n.mod(BigInteger.TWO).equals(BigInteger.ZERO))
-            throw new IllegalArgumentException("n debe ser impar y > 0");
-
-        a = a.mod(n);
-        int result = 1;
-        while (a.compareTo(BigInteger.ZERO) != 0) {
-            while (a.mod(BigInteger.TWO).equals(BigInteger.ZERO)) {
-                a = a.shiftRight(1);
-                BigInteger nMod8 = n.mod(BigInteger.valueOf(8));
-                if (nMod8.equals(BigInteger.valueOf(3)) || nMod8.equals(BigInteger.valueOf(5))) {
-                    result = -result;
-                }
+        while (exponent > 0) {
+            if (exponent % 2 == 1) {
+                x = (x * y) % mod;
             }
-            // intercambio a <-> n
-            BigInteger tmp = a;
-            a = n;
-            n = tmp;
-            if (a.mod(BigInteger.valueOf(4)).equals(BigInteger.valueOf(3)) &&
-                    n.mod(BigInteger.valueOf(4)).equals(BigInteger.valueOf(3))) {
-                result = -result;
-            }
-            a = a.mod(n);
+            y = (y * y) % mod;
+            exponent /= 2;
         }
-        return n.equals(BigInteger.ONE) ? result : 0;
+        return x % mod;
     }
 
-    public static boolean isProbablePrime(BigInteger n, int rounds) {
-        if (n.compareTo(BigInteger.TWO) < 0) return false;
-        if (n.equals(BigInteger.TWO)) return true;
-        if (n.mod(BigInteger.TWO).equals(BigInteger.ZERO)) return false;
+    // Function to calculate the Jacobian symbol of a given number
+    static long calculateJacobian(long a, long n) {
+        if (n <= 0 || n % 2 == 0) {
+            return 0;
+        }
 
-        for (int i = 0; i < rounds; i++) {
-            BigInteger a;
-            do {
-                a = new BigInteger(n.bitLength(), rnd);
-            } while (a.compareTo(BigInteger.TWO) < 0 || a.compareTo(n.subtract(BigInteger.TWO)) > 0);
+        long ans = 1;
+        if (a < 0) {
+            a = -a; // (a/n) = (-a/n) * (-1/n)
+            if (n % 4 == 3) {
+                ans = -ans; // (-1/n) = -1 if n ≡ 3 (mod 4)
+            }
+        }
+        if (a == 1) {
+            return ans; // (1/n) = 1
+        }
 
-            int x = jacobi(a, n);
-            if (x == 0) return false;
-            BigInteger modExp = a.modPow(n.subtract(BigInteger.ONE).shiftRight(1), n);
-            BigInteger jacobiMod = BigInteger.valueOf(x == 1 ? 1 : n.subtract(BigInteger.ONE));
+        while (a != 0) {
+            if (a < 0) {
+                a = -a; // (a/n) = (-a/n) * (-1/n)
+                if (n % 4 == 3) {
+                    ans = -ans; // (-1/n) = -1 if n ≡ 3 (mod 4)
+                }
+            }
+            while (a % 2 == 0) {
+                a /= 2;
+                if (n % 8 == 3 || n % 8 == 5) {
+                    ans = -ans;
+                }
+            }
 
-            if (!modExp.equals(jacobiMod)) return false;
+            long temp = a;
+            a = n;
+            n = temp;
+
+            if (a % 4 == 3 && n % 4 == 3) {
+                ans = -ans;
+            }
+            a %= n;
+            if (a > n / 2) {
+                a -= n;
+            }
+        }
+        return (n == 1) ? ans : 0;
+    }
+
+    // Function to perform the Solovay-Strassen Primality Test
+    static boolean solovayStrassen(long p, int iteration) {
+        if (p < 2) {
+            return false;
+        }
+        if (p != 2 && p % 2 == 0) {
+            return false;
+        }
+
+        Random rand = new Random();
+        for (int i = 0; i < iteration; i++) {
+            long r = Math.abs(rand.nextLong());
+            long a = r % (p - 1) + 1;
+            long jacobian = (p + calculateJacobian(a, p)) % p;
+            long mod = modulo(a, (p - 1) / 2, p);
+
+            if (jacobian == 0 || mod != jacobian) {
+                return false;
+            }
         }
         return true;
     }
+
+    // Driver code
+    public static void main(String[] args) {
+        int iter = 10000;
+        long num1 = 2050506;
+        long num2 = 5749;
+
+        if (solovayStrassen(num1, iter)) {
+            System.out.println(num1 + " is prime");
+        } else {
+            System.out.println(num1 + " is composite");
+        }
+
+        if (solovayStrassen(num2, iter)) {
+            System.out.println(num2 + " is prime");
+        } else {
+            System.out.println(num2 + " is composite");
+        }
+    }
+    //INFORMACION TOMADA DE : https://www.geeksforgeeks.org/dsa/solovay-strassen-method-of-primality-test/
 }
+
