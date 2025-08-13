@@ -4,25 +4,26 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class PrimeNumbers {
-
+    public static long contadorItr1 =0;
     public static void main(String[] args) {
-        int numero = 5749;
-        int itr = 100;
+        int numero = 10000010;
+        int itr = 50;
 // PRIMOS 1
         long sumaTiempos1=0;
+        long sumaIteraciones1 = 0;
         for (int i = 0; i < itr; i++) {
             long startTime1 = System.nanoTime(); // ⏱️ Start
             boolean resultado1 = determinarNumeroPrimo1(numero); // 🔁 Function call
             long endTime1 = System.nanoTime();   // ⏱️ End
-
             long duration1 = endTime1 - startTime1; // Total time in nanoseconds
-
-
             sumaTiempos1=sumaTiempos1+duration1;
+            sumaIteraciones1 = contadorItr1;
         }
         long prom1=sumaTiempos1/itr;
+        long promIteraciones1 = sumaIteraciones1 / itr;
         System.out.println("Tiempo de ejecución promedio: " + prom1 + " ns");
-// PRIMOS 2
+        System.out.println("Iteraciones promedio: " + promIteraciones1);
+        // PRIMOS 2
 //        long sumaTiempos2=0;
 //        for (int i = 0; i < itr; i++) {
 //
@@ -82,9 +83,11 @@ public class PrimeNumbers {
 
     public static boolean determinarNumeroPrimo1 (int numero)
     {
+
         int resultado = 0;
         for(int i = 2; i < numero; i++ )
         {
+            contadorItr1++;
             if (numero % i == 0)
             {
                 resultado = 1;
