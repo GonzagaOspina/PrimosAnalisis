@@ -1,3 +1,5 @@
+package NumeroPrimo;
+
 import java.util.Random;
 
 public class LehmerTest {

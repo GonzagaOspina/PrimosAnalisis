@@ -1,3 +1,5 @@
+package NumeroPrimo;
+
 import java.util.BitSet;
 
 public class BailliePSWForJava {

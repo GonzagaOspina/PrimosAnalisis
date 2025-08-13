@@ -1,3 +1,5 @@
+package NumeroPrimo;
+
 public class AksTest {
     private static final long[] c = new long[5749];
 

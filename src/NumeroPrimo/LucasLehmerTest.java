@@ -1,3 +1,5 @@
+package NumeroPrimo;
+
 import java.util.ArrayList;
 
 public class LucasLehmerTest {

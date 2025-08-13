@@ -1,5 +1,5 @@
-import java.math.BigInteger;
-import java.security.SecureRandom;
+package NumeroPrimo;
+
 import java.util.Random;
 
 public class PruebaSolovayStrassen {

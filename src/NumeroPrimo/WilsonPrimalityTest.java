@@ -1,3 +1,5 @@
+package NumeroPrimo;
+
 public class WilsonPrimalityTest {
 
     // Function to calculate the factorial
