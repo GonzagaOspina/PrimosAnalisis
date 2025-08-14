@@ -1,0 +1,26 @@
+Primos1----- PEOR CASO. Realizar todas las interaciones (n-2)
+
+Al realizar todas las iteraciones posibles incluso si se determina que ya no es primo hace que el tiempo de proce
+samiento sea mayor a la mayoria de los algoritmos
+
+Primos2----- PEOR CASO. Realizar n/2 iteraciones incluyendo
+
+Al determinar si el numero es primo en la mitad de iteraciones del anterio su tiempo de ejeccucion es menor, pero
+aun asi tiene que llegar al final, el peor de los casos.
+
+Primos3----- PEOR CASO. tener que hacer las n/2 iteraciones.
+
+Este tiene la particularidad de que si determinar en el proceso que ya no es primo detiene el algoritmo lo que
+podria disminuir el tiempo de ejecucion, pero si es primo se debe hacer todas las iteraciones al igual que
+el anterior
+
+Primos4----- PEOR CASO. Raiz de n iteraciones
+
+Al basarse en una funcion raiz se puede determinar que el algoritmo se detendra de manera mas rapido, como muestran
+los tiempos e iteraciones en los algoritmos es el mas eficiente puesto que si bien si la funcio es mas compleja
+se requiere menos iteracciones lo que se refleja en menos tiempo de ejeccucion
+
+Primos5----- PEOR CASO. raiz de n iteraciones
+
+tiene una logica similar pero al tomar i * i se torna muy grande la condicion si el nnumero a evaluar es muy grande
+el tiempo de ejeccucion puede aumentar sustancialmente, pero sus iteraciones no cambian con respecto a la anterior.

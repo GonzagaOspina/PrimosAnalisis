@@ -50,31 +50,26 @@ public class Matrices {
 // producto matrices 1
 public int[][] naivStandard(int [][] A, int [][] B)
 {
-
     int [][] matriz = new int [A.length][B[0].length];
     int auxiliar;
     if (A[0].length == B.length)
     {
         for (int i = 0; i < A.length; i++)
         {
-
             for (int j = 0; j < B[0].length; j++)
             {
-
                 auxiliar = 0;
                 for (int k = 0; k < B.length; k++){
                     auxiliar += (A[i][k] * B[k][j]);
-
                 }
                 matriz[i][j] = auxiliar;
-
             }
-
         }
-
     }
     return matriz;
-
 }
+
+
+
 
 }
